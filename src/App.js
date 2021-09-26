@@ -1,4 +1,4 @@
-import Registration from "./components/Registration";
+import Register from "./components/Register";
 import Login from "./components/Login";
 import "./default.scss";
 import Homepage from "./pages/Homepage";
@@ -28,6 +28,7 @@ const App = () => {
       }
     });
     return () => {
+      // will-unmount
       authListener();
     };
   }, []);
@@ -37,7 +38,7 @@ const App = () => {
       <MainLayout currentUser={currentUser}>
         <Switch>
           <Route path="/" component={Homepage} exact />
-          <Route path="/register" component={Registration} />
+          <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
         </Switch>
       </MainLayout>
