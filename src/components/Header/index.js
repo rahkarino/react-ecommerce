@@ -3,8 +3,11 @@ import "./styles.scss";
 import Logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase/utils";
+import { connect, useDispatch } from "react-redux";
+import { setCurrentUser } from "../../redux/User/user.actions";
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   return (
     <header>
       <div className="container">
@@ -18,7 +21,10 @@ const Header = (props) => {
             {props.currentUser ? (
               <li>
                 <span
-                  onClick={() => auth.signOut()}
+                  onClick={() => {
+                    auth.signOut();
+                    dispatch(setCurrentUser(null));
+                  }}
                   style={{ cursor: "pointer" }}
                 >
                   Logout
@@ -41,4 +47,8 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
+export default connect(mapStateToProps, null)(Header);
