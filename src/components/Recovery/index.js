@@ -1,38 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import PasswordIcon from "../../assets/password-icon.png";
-import { auth } from "../../firebase/utils";
 import { useHistory } from "react-router-dom";
 import "./styles.scss";
 import Loading from "../../assets/loading.svg";
+import {
+  resetPassword,
+  resetAllAuthForms,
+} from "../../redux/User/user.actions";
+import { useSelector, useDispatch } from "react-redux";
+
+const mapState = ({ user }) => ({
+  resetPasswordSuccess: user.resetPasswordSuccess,
+  resetPasswordError: user.resetPasswordError,
+});
 
 const Recovery = () => {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const handleSubmit = async (e) => {
+
+  const { resetPasswordError, resetPasswordSuccess } = useSelector(mapState);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      dispatch(resetAllAuthForms());
+      history.push("/login");
+      setLoading(false);
+    }
+  }, [resetPasswordSuccess]);
+
+  useEffect(() => {
+    setLoading(false);
+    if (Array.isArray(resetPasswordError) && resetPasswordError.length > 0) {
+      setErrors(resetPasswordError);
+    }
+  }, [resetPasswordError]);
+
+  const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
-    try {
-      const config = {
-        url: "http://localhost:3000/login",
-      };
-      await auth
-        .sendPasswordResetEmail(email, config)
-        .then(() => {
-          console.log("password reset");
-          history.push("/login");
-          setLoading(false);
-        })
-        .catch(() => {
-          setError("Email Not Found !");
-          setLoading(false);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(resetPassword(email));
   };
   const handleChange = (event) => {
     setEmail(event.target.value);
@@ -55,7 +67,13 @@ const Recovery = () => {
             </Button>
           </form>
           {loading && <img src={Loading} width="50" />}
-          {error && <span className="error">{error}</span>}
+          {errors && (
+            <ul className="errors">
+              {errors.map((err, index) => (
+                <li key={index}>{err}</li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </section>

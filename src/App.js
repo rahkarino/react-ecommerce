@@ -9,12 +9,12 @@ import { auth, handleUserProfile } from "./firebase/utils";
 import { useEffect } from "react";
 import { setCurrentUser } from "./redux/User/user.actions";
 import { useDispatch } from "react-redux";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    let authListener = null;
-    authListener = auth.onAuthStateChanged(async (userAuth) => {
+    const authListener = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot((snapshot) => {
@@ -26,7 +26,7 @@ const App = () => {
           );
         });
       } else {
-        setCurrentUser(null);
+        dispatch(setCurrentUser(userAuth));
       }
     });
     return () => {
@@ -43,6 +43,7 @@ const App = () => {
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path="/recovery" component={Recovery} />
+          <Route path="/dashboard" component={Dashboard} />
         </Switch>
       </MainLayout>
     </>

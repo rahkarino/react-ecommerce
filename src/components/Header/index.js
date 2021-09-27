@@ -1,13 +1,19 @@
 import React from "react";
 import "./styles.scss";
 import Logo from "../../assets/logo.jpg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../firebase/utils";
-import { connect, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../redux/User/user.actions";
 
+const mapState = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
 const Header = (props) => {
+  const { currentUser } = useSelector(mapState);
   const dispatch = useDispatch();
+  const history = useHistory();
   return (
     <header>
       <div className="container">
@@ -18,18 +24,24 @@ const Header = (props) => {
         </div>
         <div className="links">
           <ul>
-            {props.currentUser ? (
-              <li>
-                <span
-                  onClick={() => {
-                    auth.signOut();
-                    dispatch(setCurrentUser(null));
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  Logout
-                </span>
-              </li>
+            {currentUser ? (
+              <>
+                <li>
+                  <Link to="/dashboard">My Account</Link>
+                </li>
+                <li>
+                  <span
+                    onClick={() => {
+                      auth.signOut();
+                      dispatch(setCurrentUser(null));
+                      history.push("/login");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    Logout
+                  </span>
+                </li>
+              </>
             ) : (
               <>
                 <li>
@@ -47,8 +59,4 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser,
-});
-
-export default connect(mapStateToProps, null)(Header);
+export default Header;
