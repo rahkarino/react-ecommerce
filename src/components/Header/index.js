@@ -5,6 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../firebase/utils";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../../redux/User/user.actions";
+import { toast } from "react-toastify";
 
 const mapState = ({ user }) => ({
   currentUser: user.currentUser,
@@ -32,6 +33,7 @@ const Header = (props) => {
                 <li>
                   <span
                     onClick={() => {
+                      toast.warning("Logged out successfully");
                       auth.signOut();
                       dispatch(setCurrentUser(null));
                       history.push("/login");

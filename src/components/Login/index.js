@@ -15,20 +15,20 @@ import {
 const mapState = ({ user }) => ({
   currentUser: user.currentUser,
   signInSuccess: user.signInSuccess,
+  signInError: user.signInError,
 });
 
 const Login = () => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
-    error: "",
   });
-
+  const [errors, setErrors] = useState([]);
   const history = useHistory();
 
-  const { currentUser, signInSuccess } = useSelector(mapState);
+  const { currentUser, signInSuccess, signInError } = useSelector(mapState);
 
-  const { email, password, error } = formValues;
+  const { email, password } = formValues;
 
   const dispatch = useDispatch();
 
@@ -43,6 +43,16 @@ const Login = () => {
     }
   }, [signInSuccess]);
 
+  useEffect(() => {
+    if (Array.isArray(signInError) && signInError.length > 0) {
+      setErrors(signInError);
+    }
+  }, [signInError]);
+
+  useEffect(() => {
+    setErrors([]);
+  }, []);
+
   const handleGoogleLogin = () => {
     dispatch(signInWithGoogle());
   };
@@ -51,20 +61,10 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = formValues;
     if (email === "" || password === "") {
-      setFormValues((prevState) => {
-        return {
-          ...prevState,
-          error: "email and pass required",
-        };
-      });
+      setErrors(["email and pass required"]);
     } else {
       dispatch(signInUser({ email, password }));
-      setFormValues((prevState) => {
-        return {
-          ...prevState,
-          error: "",
-        };
-      });
+      setErrors([]);
     }
   };
 
@@ -87,7 +87,13 @@ const Login = () => {
           ) : (
             <>
               <h2>User Signin</h2>
-              {error && <span className="error">{error}</span>}
+              {errors && (
+                <ul className="errors">
+                  {errors.map((err, index) => (
+                    <li key={index}>{err}</li>
+                  ))}
+                </ul>
+              )}
               <form onSubmit={handleSubmit}>
                 <Input
                   name="email"

@@ -54,6 +54,13 @@ const Recovery = () => {
       <div className="container">
         <div className="user-form">
           <h2>Password Recovery</h2>
+          {errors && (
+            <ul className="errors">
+              {errors.map((err, index) => (
+                <li key={index}>{err}</li>
+              ))}
+            </ul>
+          )}
           <form onSubmit={handleSubmit}>
             <Input
               name="email"
@@ -67,13 +74,6 @@ const Recovery = () => {
             </Button>
           </form>
           {loading && <img src={Loading} width="50" />}
-          {errors && (
-            <ul className="errors">
-              {errors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
         </div>
       </div>
     </section>
