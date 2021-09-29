@@ -94,11 +94,11 @@ const Login = () => {
             errors.map((err, index) => (
               <div
                 key={index}
-                class="bg-red-100 mt-4 border border-red-400 text-red-700 px-4 py-2 rounded relative"
+                className="bg-red-100 mt-4 border border-red-400 text-red-700 px-4 py-2 rounded relative"
                 role="alert"
               >
-                <strong class="font-bold">Error! </strong>
-                <span class="block sm:inline">{err}</span>
+                <strong className="font-bold">Error! </strong>
+                <span className="block sm:inline">{err}</span>
               </div>
             ))
           )}

@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Sample from "./pages/Sample";
 import Sample2 from "./pages/Sample2";
 import "./assets/main.css";
+import Products from "./pages/Products";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/sample" component={Sample} />
           <Route path="/sample2" component={Sample2} />
+          <Route path="/products" component={Products} />
         </Switch>
       </MainLayout>
     </>
