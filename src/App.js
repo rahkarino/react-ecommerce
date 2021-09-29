@@ -10,6 +10,9 @@ import { useEffect } from "react";
 import { setCurrentUser } from "./redux/User/user.actions";
 import { useDispatch } from "react-redux";
 import Dashboard from "./pages/Dashboard";
+import Sample from "./pages/Sample";
+import Sample2 from "./pages/Sample2";
+import "./assets/main.css";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,6 +47,8 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path="/recovery" component={Recovery} />
           <Route path="/dashboard" component={Dashboard} />
+          <Route path="/sample" component={Sample} />
+          <Route path="/sample2" component={Sample2} />
         </Switch>
       </MainLayout>
     </>

@@ -3,8 +3,8 @@ import "./styles.scss";
 
 const Footer = () => {
   return (
-    <footer>
-      <div className="container">developer: ehsansafari.com</div>
+    <footer className="bg-gray-700 text-gray-400 text-center py-2">
+      <div className="container">Developer: ehsansafari.com</div>
     </footer>
   );
 };

@@ -98,16 +98,16 @@ export const resetPassword = (email) => async (dispatch) => {
       await auth
         .sendPasswordResetEmail(email, config)
         .then(() => {
-          toast.success("Reset password link is sent to your email");
+          toast.success("Reset password email sent.");
           dispatch({
             type: userTypes.RESET_PASSWORD_SUCCESS,
             payload: true,
           });
         })
-        .catch(() => {
+        .catch((err) => {
           dispatch({
             type: userTypes.RESET_PASSWORD_ERROR,
-            payload: false,
+            payload: ["Email is not correct"],
           });
         });
     } catch (err) {

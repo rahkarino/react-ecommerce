@@ -8,21 +8,24 @@ const mapState = ({ user }) => ({
 export default function Dashboard() {
   const { currentUser } = useSelector(mapState);
   return (
-    <section className="dashboard">
-      <div className="container">
-        <div className="user-form">
-          <h3>Welcome to user panel</h3>
-          <hr />
-          <p>
-            <b>Name: </b>
-            {currentUser.displayName}
-          </p>
-          <p>
-            <b>Email: </b>
-            {currentUser.email}
-          </p>
+    <div className="flex items-center justify-center bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            User panel
+          </h2>
+          <ul className="list-disc">
+            <li>
+              <b>Name: </b>
+              {currentUser?.displayName}
+            </li>
+            <li>
+              <b>Email: </b>
+              {currentUser?.email}
+            </li>
+          </ul>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
