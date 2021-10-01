@@ -1,9 +1,22 @@
 import React from "react";
 import { addComma } from "../../helper";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const Product = (props) => {
-  const { name, image, desc, price, category, id } = props;
+  const { name, image, desc, price, id } = props;
+  const mapState = ({ user }) => ({
+    currentUser: user.currentUser,
+  });
+  const { currentUser } = useSelector(mapState);
+  const history = useHistory();
+  const addToCartHandler = () => {
+    if (currentUser === null) {
+      history.push("/login");
+      toast.warning("Please Login");
+    } else history.push(`/basket/${id}`);
+  };
   return (
     <div className="flex p-6 rounded shadow-md hover:shadow-lg transition-shadow duration-500">
       <div className="w-28">
@@ -15,12 +28,14 @@ const Product = (props) => {
           <div className="text-2xl leading-5 font-bold text-indigo-600">
             {addComma(price)} T
           </div>
-          {/* <div className="text-sm font-medium text-gray-400 ml-3">In stock</div> */}
         </div>
         <p className="text-sm text-gray-500 mt-4">{desc}</p>
       </div>
       <div className="flex flex-col justify-center">
-        <button className="flex items-center w-full px-6 py-2 justify-center rounded bg-green-500 text-white hover:bg-green-600 transition-all duration-500">
+        <button
+          onClick={addToCartHandler}
+          className="flex items-center w-full px-6 py-2 justify-center rounded bg-green-500 text-white hover:bg-green-600 transition-all duration-500"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mr-2"
@@ -31,10 +46,9 @@ const Product = (props) => {
           </svg>
           Add to cart
         </button>
-        <button
+        <Link
           className="flex-none flex items-center px-6 py-2 mt-2  justify-center rounded bg-gray-200 text-gray-700 hover:bg-gray-100 transition-all duration-500"
-          type="button"
-          aria-label="like"
+          to={`/product/${id}`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -50,8 +64,7 @@ const Product = (props) => {
             />
           </svg>
           Read more
-        </button>
-        <Link to={`/product/${id}`}>Go</Link>
+        </Link>
       </div>
     </div>
   );

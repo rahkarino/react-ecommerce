@@ -55,8 +55,18 @@ const Header = (props) => {
             {currentUser ? (
               <>
                 <Link
+                  to="/basket"
+                  className="relative whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  <span class="absolute bottom-4 right-8 items-center justify-center px-2 py-1 mr-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                    9
+                  </span>
+                  Basket
+                </Link>
+
+                <Link
                   to="/dashboard"
-                  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                  className="whitespace-nowrap ml-8 text-base font-medium text-gray-500 hover:text-gray-900"
                 >
                   My Account
                 </Link>

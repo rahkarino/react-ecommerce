@@ -53,3 +53,30 @@ export const productDetailReducer = (state = initialState2, action) => {
       return state;
   }
 };
+
+const initialState3 = {
+  loading: false,
+  categories: [],
+};
+
+export const categoryListReducer = (state = initialState3, action) => {
+  switch (action.type) {
+    case productTypes.CATEGORY_LIST_REQUEST:
+      return {
+        loading: true,
+        categories: [],
+      };
+    case productTypes.CATEGORY_LIST_SUCCESS:
+      return {
+        loading: false,
+        categories: action.payload,
+      };
+    case productTypes.CATEGORY_LIST_ERROR:
+      return {
+        loading: false,
+        categories: [],
+      };
+    default:
+      return state;
+  }
+};

@@ -15,6 +15,7 @@ import Sample2 from "./pages/Sample2";
 import "./assets/main.css";
 import ProductList from "./pages/ProductList";
 import Product from "./pages/Product";
+import Basket from "./pages/Basket";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ const App = () => {
           <Route path="/sample2" component={Sample2} />
           <Route path="/products" component={ProductList} />
           <Route path="/product/:id" component={Product} />
+          <Route path="/basket/:id?" component={Basket} />
         </Switch>
       </MainLayout>
     </>
