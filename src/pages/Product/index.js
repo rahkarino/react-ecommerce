@@ -1,25 +1,18 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductsDetail } from "../../redux/Product/product.actions";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { addComma } from "../../helper";
 
 const Product = ({ match }) => {
+  const location = useLocation();
+  const { id, name, price, desc, image } = location.state;
   const dispatch = useDispatch();
-  const productDetail = useSelector((state) => state.productDetail);
-  const { product, loading } = productDetail;
-
-  useEffect(() => {
-    dispatch(getProductsDetail(match.params.id));
-  }, []);
 
   return (
     <section class="max-w-7xl mx-auto relative py-12 bg-blueGray-50">
       <div class="items-center flex flex-wrap">
         <div class="w-full md:w-4/12 ml-auto mr-auto">
-          <img
-            alt="..."
-            class="max-w-full rounded-lg shadow-lg"
-            src="/HDD/02.jpg"
-          />
+          <img alt="..." class="max-w-full rounded-lg shadow-lg" src={image} />
         </div>
         <div class="w-full md:w-5/12 ml-auto mr-auto">
           <div class="md:pr-12">
@@ -39,52 +32,11 @@ const Product = ({ match }) => {
                 />
               </svg>
             </div>
-            <h3 class="text-3xl font-semibold">A growing company</h3>
-            <p class="mt-4 text-lg leading-relaxed text-blueGray-500">
-              The extension comes with three pre-built pages to help you get
-              started faster. You can change the text and images and you're good
-              to go.
+            <h3 class="text-3xl font-semibold">{name}</h3>
+            <p class="mt-4 text-lg leading-relaxed text-blueGray-500">{desc}</p>
+            <p className="text-4xl py-4 leading-5 font-bold text-indigo-600">
+              {addComma(price)} T
             </p>
-            <ul class="list-none mt-6">
-              <li class="py-2">
-                <div class="flex items-center">
-                  <div>
-                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
-                      <i class="fas fa-fingerprint"></i>
-                    </span>
-                  </div>
-                  <div>
-                    <h4 class="text-blueGray-500">
-                      Carefully crafted components
-                    </h4>
-                  </div>
-                </div>
-              </li>
-              <li class="py-2">
-                <div class="flex items-center">
-                  <div>
-                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
-                      <i class="fab fa-html5"></i>
-                    </span>
-                  </div>
-                  <div>
-                    <h4 class="text-blueGray-500">Amazing page examples</h4>
-                  </div>
-                </div>
-              </li>
-              <li class="py-2">
-                <div class="flex items-center">
-                  <div>
-                    <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-pink-600 bg-pink-200 mr-3">
-                      <i class="far fa-paper-plane"></i>
-                    </span>
-                  </div>
-                  <div>
-                    <h4 class="text-blueGray-500">Dynamic components</h4>
-                  </div>
-                </div>
-              </li>
-            </ul>
             <button className="flex items-center mt-4 w-full px-6 py-2 justify-center rounded bg-green-500 text-white hover:bg-green-600 transition-all duration-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

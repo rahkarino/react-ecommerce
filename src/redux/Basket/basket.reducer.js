@@ -3,18 +3,21 @@ import basketTypes from "./basket.types";
 const initialState = {
   cartItems: [],
 };
+
 export const basketReducer = (state = initialState, action) => {
   switch (action.type) {
     case basketTypes.ADD_TO_CART_REQUEST:
+      return {
+        cartItems: [],
+      };
+    case basketTypes.ADD_TO_CART_SUCCESS:
       const item = action.payload;
-      const existingItem = state.cartItems.find(
-        (i) => i.product === item.product
-      );
+      const existingItem = state.cartItems.find((i) => i.id === item.id);
       if (existingItem) {
         return {
           ...state,
           cartItems: state.cartItems.map((i) =>
-            i.product === existingItem.product ? item : i
+            i.id === existingItem.id ? item : i
           ),
         };
       } else {
@@ -23,6 +26,10 @@ export const basketReducer = (state = initialState, action) => {
           cartItems: [...state.cartItems, item],
         };
       }
+
+    case basketTypes.ADD_TO_CART_ERROR:
+      return state;
+
     default:
       return state;
   }
