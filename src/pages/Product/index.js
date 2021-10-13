@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addComma } from "../../helper";
 
 const Product = ({ match }) => {
   const location = useLocation();
-  const { id, name, price, desc, image } = location.state;
-  const dispatch = useDispatch();
+  const { name, price, desc, image } = location?.state;
 
   return (
     <section class="max-w-7xl mx-auto relative py-12 bg-blueGray-50">
       <div class="items-center flex flex-wrap">
         <div class="w-full md:w-4/12 ml-auto mr-auto">
-          <img alt="..." class="max-w-full rounded-lg shadow-lg" src={image} />
+          <img alt={name} class="max-w-full rounded-lg shadow-lg" src={image} />
         </div>
         <div class="w-full md:w-5/12 ml-auto mr-auto">
           <div class="md:pr-12">

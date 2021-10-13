@@ -41,7 +41,7 @@ const ProductItem = (props) => {
       <div className="flex flex-col justify-center">
         <Link
           to={{
-            pathname: `/basket/${id}`,
+            pathname: `/basket`,
             state: {
               id,
               name,

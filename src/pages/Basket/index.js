@@ -1,23 +1,48 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { addToCart } from "../../redux/Basket/basket.actions";
+import { addToCart, removeFromCart } from "../../redux/Basket/basket.actions";
 import { addComma } from "../../helper";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
-const Basket = ({ match }) => {
-  const productId = match.params.id;
+const Basket = () => {
+  const history = useHistory();
   const location = useLocation();
   const basket = useSelector((state) => state.basket);
-  const { id, name, price, image } = location.state;
+  const { id, name, price, image, count } = location?.state;
   const { cartItems } = basket;
   const dispatch = useDispatch();
-  console.log("items: ", cartItems);
+
+  const mapState = ({ user }) => ({
+    currentUser: user.currentUser,
+  });
+
+  const { currentUser } = useSelector(mapState);
+
+  const checkoutHandler = () => {
+    if (currentUser === null) {
+      history.push("/login");
+      toast.warning("Please Login");
+    } else ToastContainer.success("Success checkout");
+  };
+  useEffect(() => {}, []);
+
   useEffect(() => {
-    if (productId) {
-      dispatch(addToCart({ id, name, price, image }));
+    if (id) {
+      dispatch(addToCart({ id, name, price, image, count }));
+      const location = {
+        pathname: "/basket",
+        state: {},
+      };
+      history.push(location);
     }
-  }, [dispatch, productId]);
+  }, [dispatch, id]);
+
+  const removeHandler = (id) => {
+    dispatch(removeFromCart(id));
+  };
+
   return (
     <div className="max-w-7xl mx-auto mt-10">
       <div className="flex shadow-md my-10">
@@ -44,17 +69,20 @@ const Basket = ({ match }) => {
           </div>
 
           {cartItems &&
-            cartItems.map((item) => {
+            cartItems.map((item, index) => {
               return (
-                <div className="flex items-center border-b-2 border-gray-50 hover:bg-gray-100 transition-all -mx-8 px-6 py-5">
+                <div
+                  key={index}
+                  className="flex items-center border-b-2 border-gray-50 hover:bg-gray-100 transition-all -mx-8 px-6 py-5"
+                >
                   <div className="flex w-2/5">
                     <div className="w-20">
                       <img className="h-24" src={item.image} alt="" />
                     </div>
                     <div className="flex flex-col justify-around ml-4 flex-grow">
                       <span className="font-bold text-sm">{item.name}</span>
-                      <a
-                        href="#"
+                      <button
+                        onClick={() => removeHandler(item.id)}
                         className="font-semibold hover:text-red-500 text-gray-500 text-xs"
                       >
                         <svg
@@ -71,7 +99,7 @@ const Basket = ({ match }) => {
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                           />
                         </svg>
-                      </a>
+                      </button>
                     </div>
                   </div>
                   <div className="flex justify-center w-1/5">
@@ -99,10 +127,7 @@ const Basket = ({ match }) => {
                     {addComma(item.price)} T
                   </span>
                   <span className="text-center w-1/5 font-semibold text-sm">
-                    {addComma(
-                      cartItems.reduce((acc, item) => acc + item.price, 0)
-                    )}{" "}
-                    T
+                    {addComma(item.price * item.count)} T
                   </span>
                 </div>
               );
@@ -167,7 +192,10 @@ const Basket = ({ match }) => {
                 T
               </span>
             </div>
-            <button className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full">
+            <button
+              onClick={checkoutHandler}
+              className="bg-indigo-500 font-semibold hover:bg-indigo-600 py-3 text-sm text-white uppercase w-full"
+            >
               Checkout
             </button>
           </div>

@@ -16,7 +16,6 @@ export const getProductsListByCategory = (category) => async (dispatch) => {
       .then((querySnapshot) => {
         const productsList = [];
         querySnapshot.forEach((doc) => {
-          console.log("pp: ", doc.data());
           productsList.push({ ...doc.data(), id: doc.id });
         });
         dispatch({
