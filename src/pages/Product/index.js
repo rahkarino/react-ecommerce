@@ -1,10 +1,29 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { addComma } from "../../helper";
+import { Link, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { addToCart } from "../../redux/Basket/basket.actions";
 
-const Product = ({ match }) => {
+const Product = () => {
   const location = useLocation();
-  const { name, price, desc, image } = location?.state;
+  const { id, name, price, desc, image } = location?.state;
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const mapState = ({ user }) => ({
+    currentUser: user.currentUser,
+  });
+  const { currentUser } = useSelector(mapState);
+  const addToCartHandler = () => {
+    if (currentUser === null) {
+      history.push("/login");
+      toast.warning("Please Login");
+    } else {
+      dispatch(addToCart({ id, name, price, image }));
+      history.push(`/basket`);
+    }
+  };
 
   return (
     <section class="max-w-7xl mx-auto relative py-12 bg-blueGray-50">
@@ -35,7 +54,10 @@ const Product = ({ match }) => {
             <p className="text-4xl py-4 leading-5 font-bold text-indigo-600">
               {addComma(price)} T
             </p>
-            <button className="flex items-center mt-4 w-full px-6 py-2 justify-center rounded bg-green-500 text-white hover:bg-green-600 transition-all duration-500">
+            <button
+              onClick={addToCartHandler}
+              className="flex items-center mt-4 w-full px-6 py-2 justify-center rounded bg-green-500 text-white hover:bg-green-600 transition-all duration-500"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 mr-2"
@@ -46,6 +68,24 @@ const Product = ({ match }) => {
               </svg>
               Add to cart
             </button>
+            <Link
+              to="/products"
+              className="flex items-center mt-4 w-full px-6 py-2 justify-center rounded bg-gray-200 text-gray-700 hover:bg-gray-100 transition-all duration-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Back to shop
+            </Link>
           </div>
         </div>
       </div>

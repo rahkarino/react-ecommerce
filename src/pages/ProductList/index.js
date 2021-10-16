@@ -13,12 +13,10 @@ const ProductList = () => {
   const categoriesList = useSelector((state) => state.categoriesList);
   const { products, loading } = productsList;
   const { categories, loading: catLoading } = categoriesList;
-  const [categoriess, setCategoriess] = useState([]);
 
   useEffect(() => {
     dispatch(getCategoriesList);
     dispatch(getProductsListAll);
-    setCategoriess(categories);
   }, [dispatch]);
 
   const handleCategoryBtn = (category) => {
@@ -43,8 +41,8 @@ const ProductList = () => {
             >
               All
             </button>
-            {categoriess &&
-              categoriess.map((item, index) => {
+            {categories &&
+              categories.map((item, index) => {
                 return (
                   <button
                     onClick={() => handleCategoryBtn(item.id)}

@@ -50,3 +50,43 @@ export const removeFromCart = (id) => async (dispatch, getState) => {
     });
   }
 };
+
+export const incrementCartItem = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: basketTypes.INCREMENT_ITEM_REQUEST,
+    });
+    dispatch({
+      type: basketTypes.INCREMENT_ITEM_SUCCESS,
+      payload: id,
+    });
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().basket.cartItems)
+    );
+  } catch (error) {
+    dispatch({
+      type: basketTypes.INCREMENT_ITEM_ERROR,
+    });
+  }
+};
+
+export const decrementCartItem = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: basketTypes.DECREMENT_ITEM_REQUEST,
+    });
+    dispatch({
+      type: basketTypes.DECREMENT_ITEM_SUCCESS,
+      payload: id,
+    });
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().basket.cartItems)
+    );
+  } catch (error) {
+    dispatch({
+      type: basketTypes.DECREMENT_ITEM_ERROR,
+    });
+  }
+};

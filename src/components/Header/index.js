@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.scss";
 import Logo from "../../assets/reactland-logo.png";
 import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../firebase/utils";
@@ -13,6 +12,8 @@ const mapState = ({ user }) => ({
 
 const Header = (props) => {
   const { currentUser } = useSelector(mapState);
+  const basket = useSelector((state) => state.basket);
+  const { cartItems } = basket;
   const dispatch = useDispatch();
   const history = useHistory();
   return (
@@ -59,7 +60,7 @@ const Header = (props) => {
                   className="relative whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
                 >
                   <span class="absolute bottom-4 right-8 items-center justify-center px-2 py-1 mr-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                    9
+                    {cartItems.length}
                   </span>
                   Basket
                 </Link>

@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import { addToCart, removeFromCart } from "../../redux/Basket/basket.actions";
+import {
+  incrementCartItem,
+  decrementCartItem,
+  removeFromCart,
+} from "../../redux/Basket/basket.actions";
 import { addComma } from "../../helper";
 import { Link, useHistory } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Basket = () => {
   const history = useHistory();
-  const location = useLocation();
   const basket = useSelector((state) => state.basket);
-  const { id, name, price, image, count } = location?.state;
   const { cartItems } = basket;
   const dispatch = useDispatch();
 
@@ -24,23 +25,19 @@ const Basket = () => {
     if (currentUser === null) {
       history.push("/login");
       toast.warning("Please Login");
-    } else ToastContainer.success("Success checkout");
+    } else toast.success("Success checkout");
   };
-  useEffect(() => {}, []);
-
-  useEffect(() => {
-    if (id) {
-      dispatch(addToCart({ id, name, price, image, count }));
-      const location = {
-        pathname: "/basket",
-        state: {},
-      };
-      history.push(location);
-    }
-  }, [dispatch, id]);
 
   const removeHandler = (id) => {
     dispatch(removeFromCart(id));
+  };
+
+  const incrementHandler = (id) => {
+    dispatch(incrementCartItem(id));
+  };
+
+  const decrementHandler = (id) => {
+    dispatch(decrementCartItem(id));
   };
 
   return (
@@ -67,8 +64,9 @@ const Basket = () => {
               Total
             </h3>
           </div>
-
-          {cartItems &&
+          {cartItems.length <= 0 ? (
+            <h2 className="text-red-700">Your shopping cart is empty</h2>
+          ) : (
             cartItems.map((item, index) => {
               return (
                 <div
@@ -103,25 +101,29 @@ const Basket = () => {
                     </div>
                   </div>
                   <div className="flex justify-center w-1/5">
-                    <svg
-                      className="fill-current text-gray-600 w-3"
-                      viewBox="0 0 448 512"
-                    >
-                      <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                    </svg>
+                    <button onClick={() => decrementHandler(item.id)}>
+                      <svg
+                        className="fill-current text-gray-600 w-3"
+                        viewBox="0 0 448 512"
+                      >
+                        <path d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                      </svg>
+                    </button>
 
                     <input
                       className="mx-2 border text-center w-8"
                       type="text"
-                      defaultValue="1"
+                      value={item.count}
                     />
 
-                    <svg
-                      className="fill-current text-gray-600 w-3"
-                      viewBox="0 0 448 512"
-                    >
-                      <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
-                    </svg>
+                    <button onClick={() => incrementHandler(item.id)}>
+                      <svg
+                        className="fill-current text-gray-600 w-3"
+                        viewBox="0 0 448 512"
+                      >
+                        <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z" />
+                      </svg>
+                    </button>
                   </div>
                   <span className="text-center w-1/5 font-semibold text-sm">
                     {addComma(item.price)} T
@@ -131,7 +133,8 @@ const Basket = () => {
                   </span>
                 </div>
               );
-            })}
+            })
+          )}
 
           <Link
             to="/products"
@@ -156,7 +159,13 @@ const Basket = () => {
               Items {cartItems && cartItems.length}
             </span>
             <span className="font-semibold text-sm">
-              {addComma(cartItems.reduce((acc, item) => acc + item.price, 0))}T
+              {addComma(
+                cartItems.reduce(
+                  (acc, item) => acc + item.price * item.count,
+                  0
+                )
+              )}{" "}
+              T
             </span>
           </div>
           <div>
@@ -164,7 +173,7 @@ const Basket = () => {
               Shipping
             </label>
             <select className="block p-2 text-gray-600 w-full text-sm">
-              <option>Standard shipping - $10.00</option>
+              <option>Standard shipping: 100,000 T</option>
             </select>
           </div>
           <div className="py-10">
@@ -186,10 +195,15 @@ const Basket = () => {
           </button>
           <div className="border-t mt-8">
             <div className="flex font-semibold justify-between py-6 text-sm uppercase">
-              <span>Total cost</span>
+              <span>Total cost:</span>
               <span>
-                {addComma(cartItems.reduce((acc, item) => acc + item.price, 0))}
-                T
+                {addComma(
+                  cartItems.reduce(
+                    (acc, item) => acc + item.price * item.count,
+                    0
+                  ) + (cartItems.length > 0 ? 100000 : 0)
+                )}{" "}
+                Toman
               </span>
             </div>
             <button
