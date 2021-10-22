@@ -13,7 +13,9 @@ const ProductList = () => {
   const categoriesList = useSelector((state) => state.categoriesList);
   const { products, loading } = productsList;
   const { categories, loading: catLoading } = categoriesList;
-
+  useEffect(() => {
+    document.title = "Products | ReactLand";
+  }, []);
   useEffect(() => {
     dispatch(getCategoriesList);
     dispatch(getProductsListAll);

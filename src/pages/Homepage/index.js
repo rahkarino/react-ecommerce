@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Homepage = () => {
+  useEffect(() => {
+    document.title = "ReactLand | Homepage";
+  }, []);
   return (
     <section className="home-page">
       <div className="container">

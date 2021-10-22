@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Logo from "../../assets/reactland-logo.png";
 
 const About = () => {
+  useEffect(() => {
+    document.title = "About us | ReactLand";
+  }, []);
   return (
     <div className="flex items-center justify-center bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -24,8 +27,9 @@ const About = () => {
               You are also able to signin to your gmail account (login with
               Google).
               <br />
-              For handling frontend, I used ReactJS library and for backend, Firebase is used. Application's UI is implemented by TailwindCSS.
-              <br/>
+              For handling frontend, I used ReactJS library and for backend,
+              Firebase is used. Application's UI is implemented by TailwindCSS.
+              <br />
             </p>
           </div>
         </div>

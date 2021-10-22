@@ -14,6 +14,9 @@ const Product = () => {
   const mapState = ({ user }) => ({
     currentUser: user.currentUser,
   });
+  useEffect(() => {
+    document.title = `${name} | ReactLand`;
+  }, []);
   const { currentUser } = useSelector(mapState);
   const addToCartHandler = () => {
     if (currentUser === null) {

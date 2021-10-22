@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const mapState = ({ user }) => ({
@@ -6,6 +6,10 @@ const mapState = ({ user }) => ({
 });
 
 export default function Dashboard() {
+  useEffect(() => {
+    document.title = "User Panel | ReactLand";
+  }, []);
+
   const { currentUser } = useSelector(mapState);
   return (
     <div className="flex items-center justify-center bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">

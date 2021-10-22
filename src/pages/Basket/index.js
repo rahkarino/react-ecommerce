@@ -15,6 +15,10 @@ const Basket = () => {
   const { cartItems } = basket;
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    document.title = "Shopping Cart | ReactLand";
+  }, []);
+
   const mapState = ({ user }) => ({
     currentUser: user.currentUser,
   });
